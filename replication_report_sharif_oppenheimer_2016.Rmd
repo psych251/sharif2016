@@ -1,0 +1,232 @@
+---
+title: "Replication of Study 1 by Sharif & Oppenheimer (2016, Psychological Science)"
+author: "Benjamin E. deMayo (bdemayo@stanford.edu)"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+---
+
+<!-- Replication reports should all use this template to standardize reporting across projects.  These reports will be public supplementary materials that accompany the summary report(s) of the aggregate results. -->
+
+##Introduction
+
+This is a replication of Sharif & Oppenheimer, 2016, published in Psychological Science. The authors were interested in the role of relative encoding in memory-based judgments.The general hypothesis is that people encode past experiences in an inherently relative way before being exposed to the entire distribution from which the experience was drawn, and that during a later appraisal of the event, people fail to properly adjust their initial encoding given exposure to a greater proportion of the distribution. In Study 1, the authors investigated this phenomenon with regards to people's judgments of music quality. Participants listened either to two very bad singers ("T1-top condition) or two very good singers ("T-bottom condition") before hearing an average singer, who would be designated as the target singer for each trial. They then completed a challenging distractor task, followed by hearing two more average singers at the same level as the first average singer. Participants were then asked to eliminate one singer from the competition and choose one as the winner. The authors found that people were more likely to choose the target singer as the loser of the competition in the T1-bottom condition, obstensibly because they initially encoded that singer negatively compared to the first two good singers presented. Similarly, authors found that in the T1-top condition, the target singer was more likely to be chosen as the winner. These two results are the ones that are being tested in this replication. 
+
+##Methods
+
+###Power Analysis
+
+Effect size reported in the paper for the main chi-squared goodness of fit test was small, r = .212, df = 2. Sample sizes for 80%, 90%, and 95% a priori power were large: 215, 282 and 344, respectively. Budget limitations make these sample sizes non-feasible. The replication will use the original sample size excluding exclusions, n = 90.
+
+###Planned Sample
+
+Planned sample is the original publication sample size after removing participants who failed the manipulation check, n = 90.
+
+###Materials
+From original article: 
+
+"Stimuli. A series of clips of singers was downloaded from YouTube. Audio-only files of the clips were pretested on Amazon Mechanical Turk by 71 participants. Ten to 11 participants evaluated each clip by rating how good they thought the singer was on a 7-point Likert scale (1 = not good at all, 7 = very good). We selected two clips that were perceived to be very bad (M = 1.50, SD = 0.85; M = 1.70, SD = 0.95), three clips that were perceived to be average (M = 3.90, SD = 0.87; M = 3.90, SD = 1.00; M†=†3.70, SD = 1.16), and two clips that were perceived to be very good (M = 6.20, SD = 0.63; M = 6.00, SD = 1.16)."
+
+Participants in the original paper and in the replication are recruited on Amazon Mechanical Turk.
+
+###Procedure	
+
+
+The following procedure was adhered to precisely:
+
+"Participants were asked to imagine that they were judges at a singing competition and would listen to competitors in two auditions, the first in Los Angeles and the second in New York City. They were randomly assigned to one of two conditions. Half of the participants first listened to the two very bad singers and then to one average singer (the target singer). Because the target singer was at the top of the Time 1 distribution, we refer to this condition as the T1-top condition. The other half of the participants first listened to the two very good singers and then to one average singer (the target singer). Because the target singer was at the bottom of the Time 1 distribution, we refer to this condition as the T1-bottom condition. After listening to the three clips, participants were told to imagine that they were traveling to the next audition and needed to tune their recording equipment. They then engaged in a distractor task designed to clear auditory memory. On each trial, they listened to a series of four sounds sequentially and were then asked a question about the sounds. They completed five trials, with a different question asked on each trial (e.g., which sound played the longest, which sound had the lowest pitch). After this distractor task, participants were told that they had arrived in New York City. All of the participants, regardless of condition, then listened to two average, nontarget, singers (roughly equal in quality to the target singer according to the pretest). Which average singer was the target singer and which average singers were the nontarget singers were counterbalanced across participants. At the end of the second set of auditions, participants chose one singer as the winner of the competition. They also selected one contestant to eliminate, in a procedure akin to the approach on American Idol (Blankens, 2002-2016)."
+
+The survey will be administered through Qualtrics on Amazon Mechanical Turk.
+
+###Analysis Plan
+
+Original data will be consolidated (using tidyr function gather) to show each participant's condition, counterbalance order, which singers they chose as the loser and winner, and a column with binary values indicating whether the target was chosen as empirically predicted. Columns indicating participants' familiarity with each of the songs will also included for the purpose of exploratory post-hoc analyses. 
+
+Participants will also be excluded from the confirmatory analysis if they eliminate one of the "good" singers in the T1-bottom condition or choose one of the "bad" singers as the winner in the T1-top condition -- this serves as the manipulation check to make sure participants are actually attending to the quality of the singers in the videos. 
+
+**Clarify key analysis of interest here** 
+A chi-square goodness-of-fit test, df will be used to test whether participants' selection of the target singers as winners and losers in the T1-top and T1-bottom condition, respectively differs significantly from chance.
+
+###Differences from Original Study
+
+The sample size is slightly smaller than in the original publication due to budget constraints, making the a priori power slightly below 50%. Verification of stimuli validity will not be re-performed in the replication attempt. The procedure attempts to replicate the original survey exactly, except for inclusion of institution-specific IRB text and the exclusion of certain demographic questions that were not analyzed in the published paper.
+
+### Methods Addendum (Post Data Collection)
+
+You can comment this section out prior to final report with data collection.
+
+#### Actual Sample
+  Sample size, demographics, data exclusions based on rules spelled out in analysis plan
+
+#### Differences from pre-data collection methods plan
+  Any differences from what was described as the original plan, or ‚Äúnone‚Äù.
+
+
+##Results
+
+
+### Data preparation
+
+Data preparation following the analysis plan.
+	
+```{r include=F}
+###Data Preparation
+
+####Load Relevant Libraries and Functions
+library(tidyverse)
+library(readr)
+
+####Import data
+d_raw <- read_csv("sharif_oppenheimer_replication_data.csv")
+
+#### Data exclusion / filtering
+
+d_filter <- d_raw %>% ##filter for pilot participants
+              filter(!(is.na(condition))) %>%
+              filter(grepl("t1_", counterbalance)) ##get rid of qualtrics import info
+
+d_tidy <- d_filter %>% #use tidyr functions to consolidate data from different counterbalance conditions
+              
+              gather(cond, winner, winner_bottom_a, winner_bottom_b, winner_bottom_c,
+                     winner_top_a, winner_top_b, winner_top_c) %>% ##get 'winner' columns into tidy format
+  
+              gather(cond1, eliminate, eliminate_bottom_a, eliminate_bottom_b,
+                     eliminate_bottom_c, eliminate_top_a, eliminate_top_b,
+                     eliminate_top_c) %>% #get 'eliminate' columns into tidy format
+              
+              filter(!(is.na(winner))) %>% #get rid of extraneous rows with "NA" for "winner"
+              filter(!(is.na(eliminate))) %>% #get rid of extraneous rows with "NA" for "eliminate"
+              
+              #gather the familiarity columns into tidy format. Can't think of a better way to do this without redundancy
+              gather(f1, familiarity_1, familiarity_bottom_a_1, familiarity_bottom_b_1,
+                     familiarity_bottom_c_1, familiarity_top_a_1, familiarity_top_b_1,
+                     familiarity_top_c_1) %>%
+              
+              gather(f2, familiarity_2, familiarity_bottom_a_2, familiarity_bottom_b_2,
+                     familiarity_bottom_c_2, familiarity_top_a_2, familiarity_top_b_2,
+                     familiarity_top_c_2) %>%
+              
+              gather(f3, familiarity_3, familiarity_bottom_a_3, familiarity_bottom_b_3,
+                     familiarity_bottom_c_3, familiarity_top_a_3, familiarity_top_b_3,
+                     familiarity_top_c_3) %>%
+              
+              gather(f4, familiarity_4, familiarity_bottom_a_4, familiarity_bottom_b_4,
+                     familiarity_bottom_c_4, familiarity_top_a_4, familiarity_top_b_4,
+                     familiarity_top_c_4) %>%
+              
+              gather(f5, familiarity_5, familiarity_bottom_a_5, familiarity_bottom_b_5,
+                     familiarity_bottom_c_5, familiarity_top_a_5, familiarity_top_b_5,
+                     familiarity_top_c_5) %>%
+             
+              #filter out extraneous familiarity rows
+              
+              filter(!(is.na(familiarity_1))) %>%
+              filter(!(is.na(familiarity_2))) %>%
+              filter(!(is.na(familiarity_3))) %>%
+              filter(!(is.na(familiarity_4))) %>%
+              filter(!(is.na(familiarity_5)))
+
+#### Prepare data for analysis - create columns etc.
+
+##select only the columns that are relevant to analysis
+d_analysis <- d_tidy %>%
+              select(ResponseId, condition, counterbalance,
+                     winner, eliminate, familiarity_1,
+                     familiarity_2, familiarity_3, familiarity_4, familiarity_5)
+
+
+#convert everything to numeric. Query: Is there a better way to do this?
+d_analysis$eliminate <- as.numeric(d_analysis$eliminate)
+d_analysis$winner <- as.numeric(d_analysis$winner)
+d_analysis$familiarity_1 <- as.numeric(d_analysis$familiarity_1)
+d_analysis$familiarity_2 <- as.numeric(d_analysis$familiarity_2)
+d_analysis$familiarity_3 <- as.numeric(d_analysis$familiarity_3)
+d_analysis$familiarity_4 <- as.numeric(d_analysis$familiarity_4)
+d_analysis$familiarity_5 <- as.numeric(d_analysis$familiarity_5)
+
+#add a column indicating whether participants should be excluded or not             
+d_analysis <- d_analysis %>%
+                mutate(exclude = 
+                case_when(
+                  grepl("bottom", condition) & (eliminate == 1 | eliminate == 2) ~ 1,
+                  grepl("top", condition) & (winner == 1 | winner == 2) ~ 1,
+                  TRUE ~ 0
+                ))
+
+#add column indicating whether the third (target) singer was chosen
+d_analysis <-  d_analysis %>%
+                mutate(target_chosen =
+                case_when(
+                  grepl("bottom", condition) & eliminate == 3 ~ 1,
+                  grepl("top", condition) & winner == 3 ~ 1,
+                  TRUE ~ 0
+                ))
+#add column indicating whether the fourth singer (the second average singer) was chosen
+d_analysis <-  d_analysis %>%
+                mutate(fourth_chosen =
+                case_when(
+                  grepl("bottom", condition) & eliminate == 4 ~ 1,
+                  grepl("top", condition) & winner == 4 ~ 1,
+                  TRUE ~ 0
+                ))
+
+#add column indicating whether the fifth singer (the third average singer) was chosen
+d_analysis <-  d_analysis %>%
+                mutate(fifth_chosen =
+                case_when(
+                  grepl("bottom", condition) & eliminate == 5 ~ 1,
+                  grepl("top", condition) & winner == 5 ~ 1,
+                  TRUE ~ 0
+                ))
+
+#filter out excluded participants who eliminated a top singer or chose a bottom singer as the winner
+d_without_exclusions <- d_analysis %>%
+                filter(exclude == 0)
+
+
+```
+
+### Confirmatory analysis
+
+```{r}
+##Chi-square goodness-of-fit test, verifying whether the distribution differs significantly from chance
+tallies <- c(sum(d_without_exclusions$target_chosen), sum(d_without_exclusions$fourth_chosen), sum(d_without_exclusions$fifth_chosen))
+test <- chisq.test(tallies, p = c(1/3, 1/3, 1/3))
+test
+
+##Additional goodness of fit test. The test reported in the paper also takes into account variance created by the two non-target average singers, which seems irrelevant to the analysis of interest. This test compares the observed distribution to the expected distribution of 1/3 chance of participants choosing the target singer and 2/3 chance of participants choosing a non-target singer. 
+adjusted_tallies <- 
+  c(sum(d_without_exclusions$target_chosen), sum(d_without_exclusions$fourth_chosen) + sum(d_without_exclusions$fifth_chosen))
+adjusted_test <- chisq.test(adjusted_tallies, p = c(1/3, 2/3))
+adjusted_test
+
+```
+
+
+
+*Side-by-side graph with original graph is ideal here*
+
+```{r}
+####Reproducing plot in the paper
+#####Ran into problems with this; will resubmit once I've figured this out.
+
+```
+
+
+###Exploratory analyses
+
+Any follow-up analyses desired (not required).  
+
+## Discussion
+
+### Summary of Replication Attempt
+
+Open the discussion section with a paragraph summarizing the primary result from the confirmatory analysis and the assessment of whether it replicated, partially replicated, or failed to replicate the original result.  
+
+### Commentary
+
+Add open-ended commentary (if any) reflecting (a) insights from follow-up exploratory analysis, (b) assessment of the meaning of the replication (or not) - e.g., for a failure to replicate, are the differences between original and present study ones that definitely, plausibly, or are unlikely to have been moderators of the result, and (c) discussion of any objections or challenges raised by the current and original authors about the replication attempt.  None of these need to be long.
