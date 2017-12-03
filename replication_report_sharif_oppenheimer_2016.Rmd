@@ -14,7 +14,7 @@ output:
 
 ##Introduction
 
-This is a replication of Sharif & Oppenheimer, 2016, published in Psychological Science. The authors were interested in the role of relative encoding in memory-based judgments.The general hypothesis is that people encode past experiences in an inherently relative way before being exposed to the entire distribution from which the experience was drawn, and that during a later appraisal of the event, people fail to properly adjust their initial encoding given exposure to a greater proportion of the distribution. In Study 1, the authors investigated this phenomenon with regards to people's judgments of music quality. Participants listened either to two very bad singers ("T1-top condition) or two very good singers ("T-bottom condition") before hearing an average singer, who would be designated as the target singer for each trial. They then completed a challenging distractor task, followed by hearing two more average singers at the same level as the first average singer. Participants were then asked to eliminate one singer from the competition and choose one as the winner. The authors found that people were more likely to choose the target singer as the loser of the competition in the T1-bottom condition, obstensibly because they initially encoded that singer negatively compared to the first two good singers presented. Similarly, authors found that in the T1-top condition, the target singer was more likely to be chosen as the winner. These two results are the ones that are being tested in this replication. 
+This is a replication of Sharif & Oppenheimer, 2016, published in Psychological Science. The authors were interested in the role of relative encoding in memory-based judgments.The general hypothesis is that people encode past experiences in an inherently relative way before being exposed to the entire distribution from which the experience was drawn, and that during a later appraisal of the event, people fail to properly adjust their initial encoding given exposure to a greater proportion of the distribution. In Study 1, the authors investigated this phenomenon with regards to people's judgments of music quality. Participants listened either to two very bad singers ("T1-top condition") or two very good singers ("T1-bottom condition") before hearing an average singer, who would be designated as the target singer for each trial. They then completed a challenging distractor task, followed by hearing two more average singers at the same level as the first average singer. Participants were then asked to eliminate one singer from the competition and choose one as the winner. The authors found that people were more likely to choose the target singer as the loser of the competition in the T1-bottom condition, obstensibly because they initially encoded that singer negatively compared to the first two good singers presented. Similarly, authors found that in the T1-top condition, the target singer was more likely to be chosen as the winner. These two results are the ones that are being tested in this replication. 
 
 ##Methods
 
@@ -29,7 +29,7 @@ Planned sample is the original publication sample size after removing participan
 ###Materials
 From original article: 
 
-"Stimuli. A series of clips of singers was downloaded from YouTube. Audio-only files of the clips were pretested on Amazon Mechanical Turk by 71 participants. Ten to 11 participants evaluated each clip by rating how good they thought the singer was on a 7-point Likert scale (1 = not good at all, 7 = very good). We selected two clips that were perceived to be very bad (M = 1.50, SD = 0.85; M = 1.70, SD = 0.95), three clips that were perceived to be average (M = 3.90, SD = 0.87; M = 3.90, SD = 1.00; M = 3.70, SD = 1.16), and two clips that were perceived to be very good (M = 6.20, SD = 0.63; M = 6.00, SD = 1.16)."
+> Stimuli. A series of clips of singers was downloaded from YouTube. Audio-only files of the clips were pretested on Amazon Mechanical Turk by 71 participants. Ten to 11 participants evaluated each clip by rating how good they thought the singer was on a 7-point Likert scale (1 = not good at all, 7 = very good). We selected two clips that were perceived to be very bad (M = 1.50, SD = 0.85; M = 1.70, SD = 0.95), three clips that were perceived to be average (M = 3.90, SD = 0.87; M = 3.90, SD = 1.00; M = 3.70, SD = 1.16), and two clips that were perceived to be very good (M = 6.20, SD = 0.63; M = 6.00, SD = 1.16).
 
 Participants in the original paper and in the replication are recruited on Amazon Mechanical Turk.
 
@@ -38,7 +38,7 @@ Participants in the original paper and in the replication are recruited on Amazo
 
 The following procedure was adhered to precisely:
 
-"Participants were asked to imagine that they were judges at a singing competition and would listen to competitors in two auditions, the first in Los Angeles and the second in New York City. They were randomly assigned to one of two conditions. Half of the participants first listened to the two very bad singers and then to one average singer (the target singer). Because the target singer was at the top of the Time 1 distribution, we refer to this condition as the T1-top condition. The other half of the participants first listened to the two very good singers and then to one average singer (the target singer). Because the target singer was at the bottom of the Time 1 distribution, we refer to this condition as the T1-bottom condition. After listening to the three clips, participants were told to imagine that they were traveling to the next audition and needed to tune their recording equipment. They then engaged in a distractor task designed to clear auditory memory. On each trial, they listened to a series of four sounds sequentially and were then asked a question about the sounds. They completed five trials, with a different question asked on each trial (e.g., which sound played the longest, which sound had the lowest pitch). After this distractor task, participants were told that they had arrived in New York City. All of the participants, regardless of condition, then listened to two average, nontarget, singers (roughly equal in quality to the target singer according to the pretest). Which average singer was the target singer and which average singers were the nontarget singers were counterbalanced across participants. At the end of the second set of auditions, participants chose one singer as the winner of the competition. They also selected one contestant to eliminate, in a procedure akin to the approach on American Idol (Blankens, 2002-2016)."
+> Participants were asked to imagine that they were judges at a singing competition and would listen to competitors in two auditions, the first in Los Angeles and the second in New York City. They were randomly assigned to one of two conditions. Half of the participants first listened to the two very bad singers and then to one average singer (the target singer). Because the target singer was at the top of the Time 1 distribution, we refer to this condition as the T1-top condition. The other half of the participants first listened to the two very good singers and then to one average singer (the target singer). Because the target singer was at the bottom of the Time 1 distribution, we refer to this condition as the T1-bottom condition. After listening to the three clips, participants were told to imagine that they were traveling to the next audition and needed to tune their recording equipment. They then engaged in a distractor task designed to clear auditory memory. On each trial, they listened to a series of four sounds sequentially and were then asked a question about the sounds. They completed five trials, with a different question asked on each trial (e.g., which sound played the longest, which sound had the lowest pitch). After this distractor task, participants were told that they had arrived in New York City. All of the participants, regardless of condition, then listened to two average, nontarget, singers (roughly equal in quality to the target singer according to the pretest). Which average singer was the target singer and which average singers were the nontarget singers were counterbalanced across participants. At the end of the second set of auditions, participants chose one singer as the winner of the competition. They also selected one contestant to eliminate, in a procedure akin to the approach on American Idol (Blankens, 2002-2016).
 
 The survey will be administered through Qualtrics on Amazon Mechanical Turk.
 
@@ -48,7 +48,7 @@ Original data will be consolidated (using tidyr function gather) to show each pa
 
 Participants will also be excluded from the confirmatory analysis if they eliminate one of the "good" singers in the T1-bottom condition or choose one of the "bad" singers as the winner in the T1-top condition -- this serves as the manipulation check to make sure participants are actually attending to the quality of the singers in the videos. 
 
-**Clarify key analysis of interest here** 
+**Key analysis of interest** 
 A chi-square goodness-of-fit test, df will be used to test whether participants' selection of the target singers as winners and losers in the T1-top and T1-bottom condition, respectively differs significantly from chance.
 
 ###Differences from Original Study
@@ -207,60 +207,28 @@ adjusted_test
 ```
 
 
-
-*Side-by-side graph with original graph is ideal here*
-
 ```{r}
 ####Reproducing plot in the paper
-#####Ran into problems with this; will resubmit once I've figured this out.
 
-# t1top <- d_analysis%>%
-#   filter(condition == "t1_top")%>%
-#   mutate(target_wins = as.numeric(winner == 3),
-#          target_eliminated = as.numeric((eliminate ==3)),
-#          nontarget_wins = as.numeric(winner == 4|winner == 5),
-#          nontarget_eliminated = as.numeric(eliminate == 4|eliminate == 5))
-# 
-# t1bottom <- d_analysis%>%
-#   filter(condition == "t1_bottom") %>%
-#   mutate(target_wins = as.numeric(winner == 3),
-#          target_eliminated = as.numeric((eliminate ==3)),
-#          nontarget_wins = as.numeric(winner == 4|winner == 5),
-#          nontarget_eliminated = as.numeric(eliminate == 4|eliminate == 5))
-# 
-# t1top_summary <- t1top %>%
-#   select(condition, target_wins, target_eliminated, nontarget_wins, nontarget_eliminated) %>%
-#   summarise(t_wins = mean(target_wins == 1),
-#             t_eliminate = mean(target_eliminated == 1),
-#             n_wins = mean(nontarget_wins == 1),
-#             n_eliminate = mean(nontarget_eliminated == 1))
-# 
-# t1bottom_summary <- t1_top %>%
-#   select(condition, target_wins, target_eliminated, nontarget_wins, nontarget_eliminated) %>%
-#   summarise(t_wins = mean(target_wins == 1),
-#             t_eliminate = mean(target_eliminated == 1),
-#             n_wins = mean(nontarget_wins == 1),
-#             n_eliminate = mean(nontarget_eliminated == 1))
-
-
-```
-
-
-```{r}
-bottom <- d_analysis%>%
-  filter(condition == "t1_bottom") %>%
-  mutate(target_wins = as.numeric(winner == 3),
+#first, break down data frame into "top" and "bottom" conditions
+bottom <- d_without_exclusions%>%
+  filter(condition == "t1_bottom") %>% #filter the bottom condition
+  mutate(target_wins = as.numeric(winner == 3), #create columns for bars in plot
          target_eliminated = as.numeric((eliminate ==3)),
          nontarget_wins = as.numeric(winner == 4|winner == 5),
          nontarget_eliminated = as.numeric(eliminate == 4|eliminate == 5)) %>%
-  select(-starts_with("familiar"), -starts_with("target_chosen")) %>%
+  select(-starts_with("familiar"), -starts_with("target_chosen")) %>% #get rid of unnecessary columns
   gather('category', 'value', starts_with('target'), starts_with('nontarget')) %>%
-  arrange(ResponseId) %>%
-  mutate(target_or_non = sub("\\_.*$", "", bottom$category)) %>%
+  arrange(ResponseId)
+
+bottom <- bottom%>%
+  mutate(target_or_non = sub("\\_.*$", "", bottom$category))
+
+bottom %<>%
   mutate(cond = paste(bottom$condition, bottom$target_or_non, "")) %>%
   mutate(win_or_elim = sub('.*\\_', '', bottom$category))
 
-top <- d_analysis%>%
+top <- d_without_exclusions%>%
   filter(condition == "t1_top") %>%
   mutate(target_wins = as.numeric(winner == 3),
          target_eliminated = as.numeric((eliminate ==3)),
@@ -268,20 +236,25 @@ top <- d_analysis%>%
          nontarget_eliminated = as.numeric(eliminate == 4|eliminate == 5)) %>%
   select(-starts_with("familiar"), -starts_with("target_chosen")) %>%
   gather('category', 'value', starts_with('target'), starts_with('nontarget')) %>%
-  arrange(ResponseId) %>%
-  mutate(target_or_non = sub("\\_.*$", "", top$category)) %>%
+  arrange(ResponseId)
+
+top <- top%>%
+  mutate(target_or_non = sub("\\_.*$", "", top$category))
+
+top %<>%
   mutate(cond = paste(top$condition, top$target_or_non, "")) %>%
   mutate(win_or_elim = sub('.*\\_', '', top$category))
 
 
-plot_data <- bind_rows(top, bottom) %>%
+plot_data <- bind_rows(bottom,top) %>%
   group_by(cond, win_or_elim) %>%
   summarise(percentage = mean(value))
 
 
 ggplot(plot_data,
       aes(x = cond, y = percentage, fill = win_or_elim)) +
-      geom_bar(position = "dodge", stat = "identity")
+      geom_bar(position = "dodge", stat = "identity") +
+      ggthemes::theme_few()
 
 
 
