@@ -214,8 +214,78 @@ adjusted_test
 ####Reproducing plot in the paper
 #####Ran into problems with this; will resubmit once I've figured this out.
 
+# t1top <- d_analysis%>%
+#   filter(condition == "t1_top")%>%
+#   mutate(target_wins = as.numeric(winner == 3),
+#          target_eliminated = as.numeric((eliminate ==3)),
+#          nontarget_wins = as.numeric(winner == 4|winner == 5),
+#          nontarget_eliminated = as.numeric(eliminate == 4|eliminate == 5))
+# 
+# t1bottom <- d_analysis%>%
+#   filter(condition == "t1_bottom") %>%
+#   mutate(target_wins = as.numeric(winner == 3),
+#          target_eliminated = as.numeric((eliminate ==3)),
+#          nontarget_wins = as.numeric(winner == 4|winner == 5),
+#          nontarget_eliminated = as.numeric(eliminate == 4|eliminate == 5))
+# 
+# t1top_summary <- t1top %>%
+#   select(condition, target_wins, target_eliminated, nontarget_wins, nontarget_eliminated) %>%
+#   summarise(t_wins = mean(target_wins == 1),
+#             t_eliminate = mean(target_eliminated == 1),
+#             n_wins = mean(nontarget_wins == 1),
+#             n_eliminate = mean(nontarget_eliminated == 1))
+# 
+# t1bottom_summary <- t1_top %>%
+#   select(condition, target_wins, target_eliminated, nontarget_wins, nontarget_eliminated) %>%
+#   summarise(t_wins = mean(target_wins == 1),
+#             t_eliminate = mean(target_eliminated == 1),
+#             n_wins = mean(nontarget_wins == 1),
+#             n_eliminate = mean(nontarget_eliminated == 1))
+
+
 ```
 
+
+```{r}
+bottom <- d_analysis%>%
+  filter(condition == "t1_bottom") %>%
+  mutate(target_wins = as.numeric(winner == 3),
+         target_eliminated = as.numeric((eliminate ==3)),
+         nontarget_wins = as.numeric(winner == 4|winner == 5),
+         nontarget_eliminated = as.numeric(eliminate == 4|eliminate == 5)) %>%
+  select(-starts_with("familiar"), -starts_with("target_chosen")) %>%
+  gather('category', 'value', starts_with('target'), starts_with('nontarget')) %>%
+  arrange(ResponseId) %>%
+  mutate(target_or_non = sub("\\_.*$", "", bottom$category)) %>%
+  mutate(cond = paste(bottom$condition, bottom$target_or_non, "")) %>%
+  mutate(win_or_elim = sub('.*\\_', '', bottom$category))
+
+top <- d_analysis%>%
+  filter(condition == "t1_top") %>%
+  mutate(target_wins = as.numeric(winner == 3),
+         target_eliminated = as.numeric((eliminate ==3)),
+         nontarget_wins = as.numeric(winner == 4|winner == 5),
+         nontarget_eliminated = as.numeric(eliminate == 4|eliminate == 5)) %>%
+  select(-starts_with("familiar"), -starts_with("target_chosen")) %>%
+  gather('category', 'value', starts_with('target'), starts_with('nontarget')) %>%
+  arrange(ResponseId) %>%
+  mutate(target_or_non = sub("\\_.*$", "", top$category)) %>%
+  mutate(cond = paste(top$condition, top$target_or_non, "")) %>%
+  mutate(win_or_elim = sub('.*\\_', '', top$category))
+
+
+plot_data <- bind_rows(top, bottom) %>%
+  group_by(cond, win_or_elim) %>%
+  summarise(percentage = mean(value))
+
+
+ggplot(plot_data,
+      aes(x = cond, y = percentage, fill = win_or_elim)) +
+      geom_bar(position = "dodge", stat = "identity")
+
+
+
+```
 
 ###Exploratory analyses
 
