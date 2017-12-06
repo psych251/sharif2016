@@ -20,7 +20,7 @@ This is a replication of Sharif & Oppenheimer, 2016, published in Psychological 
 
 ###Power Analysis
 
-Effect size reported in the paper for the main chi-squared goodness of fit test was small, r = .212, df = 2. Sample sizes for 80%, 90%, and 95% a priori power were large: 215, 282 and 344, respectively. Budget limitations make these sample sizes non-feasible. The replication will use the original sample size excluding exclusions, n = 90.
+Effect size reported in the paper for the main chi-squared goodness of fit test was small, r = .212, df = 2. The chi-square goodness of fit test examined whether the target singer was chosen as the winner (in the top condition) or as the loser (in the bottom condition) with greater frequency than would be predicted by chance. Sample sizes for 80%, 90%, and 95% a priori power for this statistical test were large: 215, 282 and 344, respectively. Budget limitations make these sample sizes non-feasible. The replication will use the original sample size excluding exclusions, n = 90.
 
 ###Planned Sample
 
@@ -34,7 +34,6 @@ From original article:
 Participants in the original paper and in the replication are recruited on Amazon Mechanical Turk.
 
 ###Procedure	
-
 
 The following procedure was adhered to precisely:
 
@@ -79,6 +78,7 @@ Data preparation following the analysis plan.
 ####Load Relevant Libraries and Functions
 library(tidyverse)
 library(readr)
+library(knitr)
 
 ####Import data
 d_raw <- read_csv("sharif_oppenheimer_replication_data.csv")
@@ -193,6 +193,8 @@ d_without_exclusions <- d_analysis %>%
 ### Confirmatory analysis
 
 ```{r}
+knitr::kable(d_without_exclusions)
+
 ##Chi-square goodness-of-fit test, verifying whether the distribution differs significantly from chance
 tallies <- c(sum(d_without_exclusions$target_chosen), sum(d_without_exclusions$fourth_chosen), sum(d_without_exclusions$fifth_chosen))
 test <- chisq.test(tallies, p = c(1/3, 1/3, 1/3))
@@ -248,15 +250,21 @@ top %<>%
 
 plot_data <- bind_rows(bottom,top) %>%
   group_by(cond, win_or_elim) %>%
-  summarise(percentage = mean(value))
+  summarise(percentage = mean(value)*100)
 
 
 ggplot(plot_data,
       aes(x = cond, y = percentage, fill = win_or_elim)) +
-      geom_bar(position = "dodge", stat = "identity") +
-      ggthemes::theme_few()
+      geom_bar(position = "dodge", stat = "identity", colour = 'black') +
+      ggthemes::theme_few() +
+      scale_fill_grey() +
+      xlab("Condition") +
+      ylab("Percentage of participants") +
+      theme(legend.title=element_blank())+
+      scale_x_discrete(labels = c("T1-Bottom: Non-target", "T1-Bottom: Target", 
+                                  "T1-Top: Non-target", "T1-Top: Target"))
 
-
+  
 
 ```
 
