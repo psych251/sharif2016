@@ -1,0 +1,10 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/333295/613c14abc91840fca322cce123bc33f1
+bundleId: https://api.rpubs.com/api/v1/document/333295/613c14abc91840fca322cce123bc33f1
+url: http://rpubs.com/bdemayo/333295
+when: 1513409787.00777

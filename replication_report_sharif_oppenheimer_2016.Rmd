@@ -4,6 +4,8 @@ author: "Benjamin E. deMayo (bdemayo@stanford.edu)"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   html_document:
+    fig_width: 8
+    fig_height: 6
     toc: yes
     toc_depth: 3
     toc_float:
@@ -20,14 +22,14 @@ This is a replication of Sharif & Oppenheimer, 2016, published in Psychological 
 
 ###Power Analysis
 
-Effect size reported in the paper for the main chi-squared goodness of fit test was small, r = .212, df = 2. The chi-square goodness of fit test examined whether the target singer was chosen as the winner (in the top condition) or as the loser (in the bottom condition) with greater frequency than would be predicted by chance. Sample sizes for 80%, 90%, and 95% a priori power for this statistical test were large: 215, 282 and 344, respectively. Budget limitations make these sample sizes non-feasible. The replication will use the original sample size excluding exclusions, n = 90.
+Effect size reported in the paper for the main chi-squared goodness of fit test was small, _w_ = .212, df = 2. The chi-square goodness of fit test examined whether the target singer was chosen as the winner (in the top condition) or as the loser (in the bottom condition) with greater frequency than would be predicted by chance. Sample sizes for 80%, 90%, and 95% a priori power for this statistical test were large: 215, 282 and 344, respectively. Budget limitations make these sample sizes non-feasible. The replication will use the original sample size excluding exclusions, n = 90.
 
 ###Planned Sample
 
-Planned sample is the original publication sample size after removing participants who failed the manipulation check, n = 90.
+Planned sample is the original publication sample size after removing participants who failed the manipulation check, _n_ = 90.
 
 ###Materials
-From original article: 
+Survey materials from the original publication were made available by M. Sharif and D. Oppenheimer on Open Science Framework, allowing me to replicate their survey exactly on Qualtrics, with some small modifications. A description of the video stimuli from the original paper is provided below:
 
 > Stimuli. A series of clips of singers was downloaded from YouTube. Audio-only files of the clips were pretested on Amazon Mechanical Turk by 71 participants. Ten to 11 participants evaluated each clip by rating how good they thought the singer was on a 7-point Likert scale (1 = not good at all, 7 = very good). We selected two clips that were perceived to be very bad (M = 1.50, SD = 0.85; M = 1.70, SD = 0.95), three clips that were perceived to be average (M = 3.90, SD = 0.87; M = 3.90, SD = 1.00; M†=†3.70, SD = 1.16), and two clips that were perceived to be very good (M = 6.20, SD = 0.63; M = 6.00, SD = 1.16).
 
@@ -52,17 +54,14 @@ A chi-square goodness-of-fit test, df will be used to test whether participants'
 
 ###Differences from Original Study
 
-The sample size is slightly smaller than in the original publication due to budget constraints, making the a priori power slightly below 50%. Verification of stimuli validity will not be re-performed in the replication attempt. The procedure attempts to replicate the original survey exactly, except for inclusion of institution-specific IRB text and the exclusion of certain demographic questions that were not analyzed in the published paper.
-
-### Methods Addendum (Post Data Collection)
-
-You can comment this section out prior to final report with data collection.
+The sample size is slightly smaller than in the original publication due to budget constraints, making the a priori statistical power slightly below 50%. Verification of stimuli validity will not be re-performed in the replication attempt. The procedure attempts to replicate the original survey exactly, except for inclusion of institution-specific IRB text and the exclusion of certain demographic questions that were not analyzed in the published paper.
 
 #### Actual Sample
   Sample size, demographics, data exclusions based on rules spelled out in analysis plan
+Ninety participants were recruited on Amazon Mechanical Turk. Demographic information was not collected, since no demographic data were presented in the original publication. Participants were excluded form the confirmatory analyses if they chose a non-average singer as the loser in the "bottom" condition, or chose an non-average singer as the winner in the "top" condition.
 
 #### Differences from pre-data collection methods plan
-  Any differences from what was described as the original plan, or ‚Äúnone‚Äù.
+Data were collected exactly as specified in the pre-data collection methods plan.
 
 
 ##Results
@@ -79,6 +78,7 @@ Data preparation following the analysis plan.
 library(tidyverse)
 library(readr)
 library(knitr)
+library(powerAnalysis)
 
 ####Import data
 d_raw <- read_csv("sharif_oppenheimer_replication_data.csv")
@@ -193,18 +193,22 @@ d_without_exclusions <- d_analysis %>%
 ### Confirmatory analysis
 
 ```{r}
-knitr::kable(d_without_exclusions)
+head(d_without_exclusions)
 
 ##Chi-square goodness-of-fit test, verifying whether the distribution differs significantly from chance
 tallies <- c(sum(d_without_exclusions$target_chosen), sum(d_without_exclusions$fourth_chosen), sum(d_without_exclusions$fifth_chosen))
 test <- chisq.test(tallies, p = c(1/3, 1/3, 1/3))
 test
+es <- ES.chisq.gof(tallies, c(1/3, 1/3, 1/3))
+es
 
 ##Additional goodness of fit test. The test reported in the paper also takes into account variance created by the two non-target average singers, which seems irrelevant to the analysis of interest. This test compares the observed distribution to the expected distribution of 1/3 chance of participants choosing the target singer and 2/3 chance of participants choosing a non-target singer. 
 adjusted_tallies <- 
   c(sum(d_without_exclusions$target_chosen), sum(d_without_exclusions$fourth_chosen) + sum(d_without_exclusions$fifth_chosen))
 adjusted_test <- chisq.test(adjusted_tallies, p = c(1/3, 2/3))
 adjusted_test
+adjusted_es <- ES.chisq.gof(adjusted_tallies, c(1/3, 2/3))
+adjusted_es
 
 ```
 
@@ -253,31 +257,44 @@ plot_data <- bind_rows(bottom,top) %>%
   summarise(percentage = mean(value)*100)
 
 
+plot_data$win_or_elim <- factor(plot_data$win_or_elim, levels = c("wins", "eliminated"))
+
+
+
 ggplot(plot_data,
-      aes(x = cond, y = percentage, fill = win_or_elim)) +
-      geom_bar(position = "dodge", stat = "identity", colour = 'black') +
+      aes(x = factor(cond), y = percentage, fill = win_or_elim)) +
+      geom_bar(position = "dodge", stat = "identity", colour = 'black', width = .5) +
       ggthemes::theme_few() +
       scale_fill_grey() +
+      theme(legend.position = "top") +
       xlab("Condition") +
       ylab("Percentage of participants") +
-      theme(legend.title=element_blank())+
+      scale_y_continuous(breaks = c(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60)) +
+      theme(legend.title=element_blank()) +
       scale_x_discrete(labels = c("T1-Bottom: Non-target", "T1-Bottom: Target", 
                                   "T1-Top: Non-target", "T1-Top: Target"))
+
+
+
 
   
 
 ```
-
-###Exploratory analyses
-
-Any follow-up analyses desired (not required).  
+![Plot from original paper.](sharif_original.png)
 
 ## Discussion
 
 ### Summary of Replication Attempt
 
-Open the discussion section with a paragraph summarizing the primary result from the confirmatory analysis and the assessment of whether it replicated, partially replicated, or failed to replicate the original result.  
+A chi-square goodness-of-fit test was used to examine whether participants differed significantly from chance in their choice of the three average singers. Overall, participants who chose an "average" singer to win in the T1-top condition or to lose in the T1-bottom condition chose the target singer 52% of the time, significantly more than would be predicted by chance (chance = 33.333%), _n_ = 77 after exclusions, $\chi^2$ = 12.026, _df_ = 2, _p_ = 0.002447. This result consititutes a successful replication of the original effect found in Sharif and Oppenheimer's 2016 publication. Effect size in the replication was considerably larger than in the original publication despite the smaller sample size, _w_ = 0.395198 in the replication compared with _w_ = 0.212 in the original publication. The authors of the original paper argue that this effect demonstrates evidence that participants' evaluations of quality are made "relative to the comparison time at the time of evaluation", and that participants fail to adequately adjust these evaluations once the full distribution of quality has been experienced. 
+
+An additional test was performed in the replication which binned both non-target singers into one category, in essence testing the observed distribution of [(percentage who chose the target), (percentage who chose a non-target)] vs. the expected distribution as predicted by chance, [$\frac{1}{3}$, $\frac{2}{3}$]. The analysis confirmed the original finding: $\chi^2$ = 12.006, _df_ = 1, _p_ < 0.001. 
+ 
 
 ### Commentary
 
-Add open-ended commentary (if any) reflecting (a) insights from follow-up exploratory analysis, (b) assessment of the meaning of the replication (or not) - e.g., for a failure to replicate, are the differences between original and present study ones that definitely, plausibly, or are unlikely to have been moderators of the result, and (c) discussion of any objections or challenges raised by the current and original authors about the replication attempt.  None of these need to be long.
+The effect size seen in this replication was much larger than in the original publication. The exact cause for this is unknown - perhaps it is related to the smaller sample size, which may have oversampled people who show the effect demonstrated in the original paper with a larger sample size. 
+
+The paradigm seemed to be enjoyable for most participants, although some complained about the unpleasant nature of listening to the high-pitched sounds during the distractor task. The original authors did not specify whether the survey had been designed to prevent participants from advancing in the experiment without having fully watched the video. In retrospect, this edit should have been made in the replication attempt. 
+
+
